@@ -7,7 +7,7 @@ import numpy.linalg as lg
 
 # --- Méthode d'Euler --- #
 
-def euler(y, t, h, f):
+def step_euler(y, t, h, f):
 
     res = y
     k = 0
@@ -20,6 +20,8 @@ def euler(y, t, h, f):
 
 # --- Méthode du point milieu --- #
 
-def point_milieu(y, t, h, f):
+def step_point_milieu(y, t, h, f):
+
+    
 
     
