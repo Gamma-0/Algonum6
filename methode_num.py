@@ -13,6 +13,13 @@ def euler(y, t, h, f):
     k = 0
 
     for i in range(0, y.shape[0]):
-        res[i] = y[i] + h * f(t[i], y[i])
+        res[i] = y[i] + h[i] * f(t[i], y[i])
         
     return res
+
+
+# --- Méthode du point milieu --- #
+
+def point_milieu(y, t, h, f):
+
+    
