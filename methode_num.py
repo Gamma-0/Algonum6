@@ -13,7 +13,13 @@ import numpy.linalg as lg
 # --- Méthode d'Euler --- #
 
 def step_euler(y, t, h, f):
-
+    """ La fonction "step_euler" prend 4 arguments :
+        - y : tableau representant les points d'ordonnées
+        - t : tableau representant les points d'abscisses
+        - h : tableau contenant le pas 
+        - f : fonction
+        Retourne 
+    """
     res = y
     k = 0
 
@@ -26,6 +32,13 @@ def step_euler(y, t, h, f):
 # --- Méthode du point milieu --- #
 
 def step_point_milieu(y,t,h,f):
+    """ La fonction "step_point_milieu" prend 4 arguments :
+        - y : tableau representant les points d'ordonnées
+        - t : tableau representant les points d'abscisses
+        - h : tableau contenant le pas 
+        - f : fonction
+        Retourne 
+    """
     n = np.shape(y)[0]
     a = np.zeros([n,1])
     a.shape=(n)
@@ -42,6 +55,13 @@ def step_point_milieu(y,t,h,f):
 # --- Méthode de Heun --- #
 
 def step_heun(y,t,h,f):
+    """ La fonction "step_heun" prend 4 arguments :
+        - y : tableau representant les points d'ordonnées
+        - t : tableau representant les points d'abscisses
+        - h : tableau contenant le pas 
+        - f : fonction
+        Retourne 
+    """
     n = np.shape(y)[0]
     a = np.zeros([n,1])
     a.shape=(n)
@@ -65,6 +85,13 @@ def step_heun(y,t,h,f):
 
 
 def step_runge_kutta(y,t,h,f):
+    """ La fonction "step_runge_kutta" prend 4 arguments :
+        - y : tableau representant les points d'ordonnées
+        - t : tableau representant les points d'abscisses
+        - h : tableau contenant le pas 
+        - f : fonction
+        Retourne 
+    """
     n = np.shape(y)[0]
     p1 = np.zeros([n,1])
     p1.shape=(n)
@@ -85,20 +112,18 @@ def step_runge_kutta(y,t,h,f):
     for i in range(n):
         p2[i] = f[i](a,t+ h/2)
     
-    
     for i in range(n):
         a[i] = y[i] + h/2 * p2[i]
     for i in range(n):
         p3[i] = f[i](a,t+ h/2)
     
     for i in range(n):
-        z[i] = y[i] + h * p3[i]
+        a[i] = y[i] + h * p3[i]
     for i in range(n):
         p4[i] = f[i](a,t+ h)
     
     for i in range(n):
         a[i] = y[i] + (1./6.) * h * (p1[i] + 2*p2[i] + 2*p3[i] + p4[i])
-    
     
     return a
 
@@ -108,7 +133,15 @@ def step_runge_kutta(y,t,h,f):
 
 
 def meth_n_step(y0, t0, N, h, f, step_meth):
-
+    """ La fonction "meth_n_step" prend 7 arguments :
+        - y0 :
+        - t0 :
+        - N : 
+        - h : tableau contenant le pas 
+        - f : fonction
+        - step_meth :
+        Retourne 
+    """
     y = np.zeros([N, y0.size])
     t = t0
     y[0,:] = y0
@@ -148,3 +181,10 @@ def meth_epsilon(y0,t0,tf,eps,f,meth):
 
 
 
+
+def main():
+    meth_epsilon()
+    
+
+if __name__ ==  '__main__':
+    main()
