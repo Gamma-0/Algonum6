@@ -17,7 +17,7 @@ def step_euler(y, t, h, f):
         - y : tableau representant les points d'ordonnées
         - t : tableau representant les points d'abscisses
         - h : tableau contenant le pas 
-        - f : fonction
+        - f : fonction de résolution
         Retourne 
     """
     res = y
@@ -36,7 +36,7 @@ def step_point_milieu(y,t,h,f):
         - y : tableau representant les points d'ordonnées
         - t : tableau representant les points d'abscisses
         - h : tableau contenant le pas 
-        - f : fonction
+        - f : fonction de résolution
         Retourne 
     """
     n = np.shape(y)[0]
@@ -59,7 +59,7 @@ def step_heun(y,t,h,f):
         - y : tableau representant les points d'ordonnées
         - t : tableau representant les points d'abscisses
         - h : tableau contenant le pas 
-        - f : fonction
+        - f : fonction de résolution
         Retourne 
     """
     n = np.shape(y)[0]
@@ -89,7 +89,7 @@ def step_runge_kutta(y,t,h,f):
         - y : tableau representant les points d'ordonnées
         - t : tableau representant les points d'abscisses
         - h : tableau contenant le pas 
-        - f : fonction
+        - f : fonction de résolution
         Retourne 
     """
     n = np.shape(y)[0]
@@ -131,14 +131,13 @@ def step_runge_kutta(y,t,h,f):
 
 # --- N pas de taille h --- #
 
-
 def meth_n_step(y0, t0, N, h, f, step_meth):
     """ La fonction "meth_n_step" prend 7 arguments :
         - y0 :
         - t0 :
         - N : 
         - h : tableau contenant le pas 
-        - f : fonction
+        - f : fonction de résolution
         - step_meth :
         Retourne 
     """
@@ -158,10 +157,18 @@ def meth_n_step(y0, t0, N, h, f, step_meth):
 # fonction renvoyant une seule valeur
 
 def meth_epsilon(y0,t0,tf,eps,f,meth):
-
+    """ La fonction "meth_epsilon" prend 6 arguments :
+        - y0 : réel, premier point d'ordonné
+        - t0 : réel, premier point d'abscisse 
+        - tf : 
+        - eps : 
+        - f : fonction
+        - meth :
+        Retourne 
+    """
     flag = 0
     error = eps + 1 #on met l'erreur relative au dessus de epsilon pour rentrer dans la boucle
-    N = FIRST_N
+    N = N_MAX
     h = (tf-t0) / float(N)
     yf_old = meth_n_step(y0, t0, N, h, f, meth)
     
@@ -183,8 +190,12 @@ def meth_epsilon(y0,t0,tf,eps,f,meth):
 
 
 def main():
-    meth_epsilon()
     
+    f = lambda x, t: x/(1+t**2)
+    step_euler(y, t, h, f)
+    
+
+
 
 if __name__ ==  '__main__':
     main()
