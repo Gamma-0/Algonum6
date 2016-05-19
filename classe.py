@@ -163,7 +163,7 @@ class pCauchy(object):
     def meth_epsilon(self,tf,eps,meth):
         """ La fonction "meth_epsilon" prend 4 arguments :
             - self : classe représentant le problème de Cauchy
-            - tf : 
+            - tf : borne max des abscisses 
             - eps : erreur maximale admise
             - meth : fonction de résolution pas à pas à utiliser parmi les quatres méthodes implémentées
             Retourne 
@@ -192,11 +192,10 @@ class pCauchy(object):
     def aff_courbe_eq_diff(self, tf, eps = 10E-3):
         """ La fonction  "aff_courbe_eq_diff" prend 3 arguments :
             - self : classe représentant le problème de Cauchy
-            - tf : abscisse maximale du tableau y
+            - tf : borne max des abscisses
             - eps : erreur maximale admise
             Affiche les courbes de l'équation différentielle calculées à l'aide des 4 méthodes implémentées
         """
-        
         euler = self.meth_epsilon(tf, eps, self.step_euler)
         pm = self.meth_epsilon(tf, eps, self.step_point_milieu)
         heun = self.meth_epsilon(tf, eps, self.step_heun)
@@ -225,7 +224,7 @@ class pCauchy(object):
 
 """
 
-Exemple 1:
+Exemples:
 
 """
 
@@ -234,19 +233,11 @@ def fex1(yt,t):
 
 
 
-
-
-
-
-
-
-
-
-
 def exemple1():
     ex1 = pCauchy(0,1,fex1)
     ex1.champTangente()
     
+
 
 def tests():
     nbPas=10
@@ -261,6 +252,7 @@ def tests():
     
     dim1.aff_courbe_eq_diff(nbPas*pas, eps)
     dim2.aff_courbe_eq_diff(nbPas*pas, eps)
+
 
 
 if __name__ ==  '__main__':
