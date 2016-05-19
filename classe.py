@@ -2,12 +2,30 @@
 
 import numpy as np
 import numpy.linalg as lg
+import matplotlib.pyplot as plt
 
 class pCauchy(object):
     def __init__(self, t0, y0, f):
         self.t0=t0
         self.y0=y0
         self.f = f
+
+    def champTangente(self, xmin=-10, xmax=10, ymin=-10, ymax=10, pas=1):
+        X = []
+        Y = []
+        U = []
+        V = []
+        print(len(V))
+        for t in range(xmin,xmax,pas):
+            for yt in range(ymin, ymax, pas):
+                X.append(t)
+                Y.append(yt)
+                U.append(1)
+                V.append(self.f(yt,t))
+        Q = plt.quiver(X,Y,U,V)
+        plt.show()
+
+
     # --- Méthodes à un pas --- #
     def step_euler(self, y, t, h):
         """ La fonction "step_euler" prend 4 arguments :
@@ -176,3 +194,16 @@ class pCauchy(object):
             print "More steps are needed"
     
         return yf
+
+
+"""
+
+Exemple 1:
+
+"""
+
+def fex1(yt,t):
+    return yt / (1 + t**2)
+
+ex1 = pCauchy(0,1,fex1)
+ex1.champTangente()
