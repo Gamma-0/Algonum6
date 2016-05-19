@@ -135,7 +135,7 @@ class pCauchy(object):
     # --- N pas de taille h --- #
     
     def meth_n_step(self, N, h, step_meth):
-        """ La fonction "meth_n_step" prend 7 arguments :
+        """ La fonction "meth_n_step" prend 5 arguments :
             - self : classe représentant le problème de Cauchy
             - N : nombre de pas
             - h : pas 
@@ -159,16 +159,15 @@ class pCauchy(object):
     
     # fonction renvoyant une seule valeur
     
-    def meth_epsilon(self,tf,eps,f,meth):
-        """ La fonction "meth_epsilon" prend 6 arguments :
+    def meth_epsilon(self,tf,eps,meth):
+        """ La fonction "meth_epsilon" prend 4 arguments :
             - self : classe représentant le problème de Cauchy
             - tf : 
             - eps : erreur maximale
-            - f : fonction
             - meth : fonction de résolution pas à pas à utiliser parmi les quatres méthodes implémentées
             Retourne 
         """
-        MAX_STEP = 2**16
+        MAX_STEP = 2**4
         flag = 0
         error = eps + 1 #on met l'erreur relative au dessus de epsilon pour rentrer dans la boucle
         N = 1
@@ -215,6 +214,7 @@ def tests():
     
     nbPas=10
     pas=0.1
+    """
     print(dim1.meth_n_step(nbPas, pas, dim1.step_euler))
     print(dim1.meth_n_step(nbPas, pas, dim1.step_point_milieu))
     print(dim1.meth_n_step(nbPas, pas, dim1.step_heun))
@@ -223,9 +223,12 @@ def tests():
     print(dim2.meth_n_step(nbPas, pas, dim2.step_euler))
     print(dim2.meth_n_step(nbPas, pas, dim2.step_point_milieu))
     print(dim2.meth_n_step(nbPas, pas, dim2.step_heun))
-    print(dim2.meth_n_step(nbPas, pas, dim2.step_runge_kutta))
+    print(dim2.meth_n_step(nbPas, pas, dim2.step_runge_kutta))"""
+    print(dim1.meth_epsilon(nbPas*pas, 0.001, dim1.step_euler))
+
 
 
 
 if __name__ ==  '__main__':
     exemple1()
+    tests()
