@@ -11,10 +11,10 @@ class pCauchy(object):
     # --- Méthodes à un pas --- #
     def step_euler(self, y, t, h):
         """ La fonction "step_euler" prend 4 arguments :
+            - self : classe représentant le problème de Cauchy
             - y : tableau representant les points d'ordonnées
             - t : tableau representant les points d'abscisses
             - h : tableau contenant le pas 
-            - f : fonction de résolution
             Retourne 
         """
         res = y
@@ -29,10 +29,10 @@ class pCauchy(object):
     
     def step_point_milieu(self, y,t,h):
         """ La fonction "step_point_milieu" prend 4 arguments :
+            - self : classe représentant le problème de Cauchy
             - y : tableau representant les points d'ordonnées
             - t : tableau representant les points d'abscisses
             - h : tableau contenant le pas 
-            - f : fonction de résolution
             Retourne 
         """
         n = np.shape(y)[0]
@@ -52,10 +52,10 @@ class pCauchy(object):
     
     def step_heun(self, y,t,h):
         """ La fonction "step_heun" prend 4 arguments :
+            - self : classe représentant le problème de Cauchy
             - y : tableau representant les points d'ordonnées
             - t : tableau representant les points d'abscisses
             - h : tableau contenant le pas 
-            - f : fonction de résolution
             Retourne 
         """
         n = np.shape(y)[0]
@@ -82,10 +82,10 @@ class pCauchy(object):
     
     def step_runge_kutta(self, y,t,h):
         """ La fonction "step_runge_kutta" prend 4 arguments :
+            - self : classe représentant le problème de Cauchy
             - y : tableau representant les points d'ordonnées
             - t : tableau representant les points d'abscisses
             - h : tableau contenant le pas 
-            - f : fonction de résolution
             Retourne 
         """
         n = np.shape(y)[0]
@@ -126,8 +126,7 @@ class pCauchy(object):
     
     def meth_n_step(self, N, h, step_meth):
         """ La fonction "meth_n_step" prend 7 arguments :
-            - y0 :
-            - t0 :
+            - self : classe représentant le problème de Cauchy
             - N : 
             - h : tableau contenant le pas 
             - f : fonction de résolution
@@ -151,8 +150,7 @@ class pCauchy(object):
     
     def meth_epsilon(self,tf,eps,f,meth):
         """ La fonction "meth_epsilon" prend 6 arguments :
-            - y0 : réel, premier point d'ordonné
-            - t0 : réel, premier point d'abscisse 
+            - self : classe représentant le problème de Cauchy
             - tf : 
             - eps : erreur maximale
             - f : fonction
