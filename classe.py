@@ -8,21 +8,22 @@ class pCauchy(object):
         self.t0=t0
         self.y0=y0
         self.f = f
+        
     # --- Méthodes à un pas --- #
+    
     def step_euler(self, y, t, h):
         """ La fonction "step_euler" prend 4 arguments :
             - self : classe représentant le problème de Cauchy
-            - y : tableau representant les points d'ordonnées
-            - t : tableau representant les points d'abscisses
-            - h : tableau contenant le pas 
+            - y : point d'ordonnée
+            - t : point d'abscisse
+            - h : pas 
             Retourne 
         """
-        res = y
-        k = 0
-    
-        for i in range(0, y.shape[0]):
-            res[i] = y[i] + h[i] * self.f[i](t, y[i])
-            
+        #res = y
+        #for i in range(0, y.shape[0]):
+        resf= self.f(y, t)
+        hxf = [(h*i) for i in resf]
+        res = y + hxf #y + h * self.f(y, t)
         return res
 
     # --- Méthode du point milieu --- #
@@ -30,9 +31,9 @@ class pCauchy(object):
     def step_point_milieu(self, y,t,h):
         """ La fonction "step_point_milieu" prend 4 arguments :
             - self : classe représentant le problème de Cauchy
-            - y : tableau representant les points d'ordonnées
-            - t : tableau representant les points d'abscisses
-            - h : tableau contenant le pas 
+            - y : point d'ordonnée
+            - t : point d'abscisse
+            - h : pas 
             Retourne 
         """
         n = np.shape(y)[0]
@@ -40,22 +41,21 @@ class pCauchy(object):
         a.shape=(n)
         b = np.zeros([n,1])
         for i in range(n):
-            a[i] = y[i] + (h/2) * self.f[i](y,t)
-        for i in range(n):
-            b[i] = self.f[i](a,t+h/2)
+            a[i] = y[i] + (h/2) * self.f(y,t)[i]
+        #for i in range(n):
+        b = self.f(a,t+h/2)
         for i in range(n):
             a[i] = y[i] + h*b[i]
         return a
-    
     
     # --- Méthode de Heun --- #
     
     def step_heun(self, y,t,h):
         """ La fonction "step_heun" prend 4 arguments :
             - self : classe représentant le problème de Cauchy
-            - y : tableau representant les points d'ordonnées
-            - t : tableau representant les points d'abscisses
-            - h : tableau contenant le pas 
+            - y : point d'ordonnée
+            - t : point d'abscisse
+            - h : pas 
             Retourne 
         """
         n = np.shape(y)[0]
@@ -73,19 +73,16 @@ class pCauchy(object):
             p2[i] = self.f[i](a,t+h)
         for i in range(n):
             a[i] = y[i] + (h/2) * (p1[i] + p2[i])
-        
         return a
     
-    
     # --- Méthode de Runge-Kutta --- #
-    
     
     def step_runge_kutta(self, y,t,h):
         """ La fonction "step_runge_kutta" prend 4 arguments :
             - self : classe représentant le problème de Cauchy
-            - y : tableau representant les points d'ordonnées
-            - t : tableau representant les points d'abscisses
-            - h : tableau contenant le pas 
+            - y : point d'ordonnée
+            - t : point d'abscisse
+            - h : pas 
             Retourne 
         """
         n = np.shape(y)[0]
@@ -120,30 +117,31 @@ class pCauchy(object):
         
         for i in range(n):
             a[i] = y[i] + (1./6.) * h * (p1[i] + 2*p2[i] + 2*p3[i] + p4[i])
-        
         return a
+        
     # --- N pas de taille h --- #
     
     def meth_n_step(self, N, h, step_meth):
         """ La fonction "meth_n_step" prend 7 arguments :
             - self : classe représentant le problème de Cauchy
-            - N : 
-            - h : tableau contenant le pas 
+            - N : nombre de pas
+            - h : pas 
             - f : fonction de résolution
             - step_meth :
             Retourne 
         """
-        y = np.zeros([N, self.y0.size])
+        if (isinstance(self.y0,int)):
+            y = np.zeros([N, 1])
+        else:
+            y = np.zeros([N, len(self.y0)]) 
         t = self.t0
         y[0,:] = self.y0
         
         for i in range(1,N):
-            y[i,:] = step_meth(self, y[i-1,:], t, h)
+            y[i,:] = step_meth(y[i-1,:], t, h)
             t = t + h
-        
         return y
-    
-    
+
     # --- Epsilon --- #
     
     # fonction renvoyant une seule valeur
@@ -174,5 +172,4 @@ class pCauchy(object):
         
         if flag == MAX_STEP:
             print "More steps are needed"
-    
         return yf
