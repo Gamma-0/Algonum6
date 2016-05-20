@@ -189,7 +189,7 @@ class pCauchy(object):
         
     # --- Affichage courbe équation différentielle --- #
             
-    def aff_courbe_eq_diff(self, tf, eps = 10E-3):
+    def aff_courbe_eq_diff(self, tf, eps=10E-3, file_name="courbes_eq_diff"):
         """ La fonction  "aff_courbe_eq_diff" prend 3 arguments :
             - self : classe représentant le problème de Cauchy
             - tf : borne max des abscisses
@@ -204,7 +204,7 @@ class pCauchy(object):
         t_euler = np.linspace(0, tf, np.shape(euler)[0], endpoint=False)
         t_pm = np.linspace(0, tf, np.shape(pm)[0], endpoint=False)
         t_heun = np.linspace(0, tf, np.shape(heun)[0], endpoint=False)
-        t_rk = np.linspace(0, tf, np.shape(rk)[0], endpoint=False)
+        t_rk  = np.linspace(0, tf, np.shape(rk)[0], endpoint=False)
         
         plt.title("Courbes de l'equation differentielle")
         plt.xlabel("x")
@@ -218,7 +218,7 @@ class pCauchy(object):
             
             plt.legend(loc='best')
             plt.show()
-            plt.savefig("courbes_eq_diff"+str(i)+".png")
+            plt.savefig(file_name+str(i)+".png")
             plt.close()
 
 
@@ -228,12 +228,11 @@ Exemples:
 
 """
 
-def fex1(yt,t):
-    return yt / (1 + t**2)
-
-
 
 def exemple1():
+    def fex1(yt,t):
+        return yt / (1 + t**2)
+
     ex1 = pCauchy(0,1,fex1)
     ex1.champTangente()
     
