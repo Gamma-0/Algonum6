@@ -2,7 +2,6 @@
 
 import numpy as np
 import numpy.linalg as lg
-
 import matplotlib as ma
 ma.use('Agg')
 import matplotlib.pyplot as plt
@@ -12,8 +11,8 @@ class pCauchy(object):
         self.t0=t0
         self.y0=y0
         self.f = f
-
-    def champTangente(self, meth, step=10, pas =0.1):
+        
+    def champTangente(self, step=20, xMin=-3, xMax=3, yMin=-3, yMax=3):
         """ La fonction "champTangente" prend 4 arguments :
             - self : classe représentant le problème de Cauchy
             - xmin : abscisse de la borne minimale
@@ -21,23 +20,18 @@ class pCauchy(object):
             - ymin : ordonnée de la borne minimale
             - ymax : ordonnée de la borne maximale
             - pas : pas 
-            Affiche le champ des tangentes de l'équation différentielle
+            Affiche le champ des tangentes de l'équation différentielle (de dimension 2 seulement).
         """
-        X = []
-        Y = []
-        U = []
-        V = []
-        y = self.meth_n_step(step, pas, meth)
-        
-        X = np.linspace(0, step*pas, np.shape(y)[0], endpoint=False)
-        Y=X
-        U=y[:,0]
-        V=y[:,1]
+        X = np.linspace(xMin, xMax, step)
+        Y = np.linspace(yMin, yMax, step)
 
+        X, Y = np.meshgrid(X,Y)
+        U, V = self.f([X, Y], 0)
+        
         Q = plt.quiver(X, Y, U, V)
         plt.savefig("champ_tangente.png")
         plt.show()
-        plt.clf()
+        plt.close()
 
     # --- Méthodes à un pas --- #
     
@@ -52,10 +46,8 @@ class pCauchy(object):
         y=np.array(y)
         f= self.f(y, t)
         res = y + [(h*i) for i in f] #y + h * self.f(y, t)
-
         return res
 
-    # --- Méthode du point milieu --- #
     
     def step_point_milieu(self, y,t,h):
         """ La fonction "step_point_milieu" prend 4 arguments :
@@ -76,8 +68,7 @@ class pCauchy(object):
         for i in range(n):
             a[i] = y[i] + h*b[i]
         return a
-    
-    # --- Méthode de Heun --- #
+        
     
     def step_heun(self, y,t,h):
         """ La fonction "step_heun" prend 4 arguments :
@@ -102,7 +93,6 @@ class pCauchy(object):
             a[i] = y[i] + (h/2) * (p1[i] + p2[i])
         return a
     
-    # --- Méthode de Runge-Kutta --- #
     
     def step_runge_kutta(self, y,t,h):
         """ La fonction "step_runge_kutta" prend 4 arguments :
@@ -146,7 +136,7 @@ class pCauchy(object):
             - h : pas 
             - f : fonction de résolution
             - step_meth : fonction de résolution pas à pas à utiliser parmi les quatres méthodes implémentées
-            Retourne 
+            Retourne une solution de N pas de taille constante h de l'équation différentielle donnée en paramètre
         """
         if (isinstance(self.y0,int)):
             y = np.zeros([N, 1])
@@ -160,9 +150,7 @@ class pCauchy(object):
             t = t + h
         return y
 
-    # --- Epsilon --- #
-    
-    # fonction renvoyant une seule valeur
+    # --- Calcul solution approchée avec erreur epsilon --- #
     
     def meth_epsilon(self,tf,eps,meth):
         """ La fonction "meth_epsilon" prend 4 arguments :
@@ -170,7 +158,7 @@ class pCauchy(object):
             - tf : borne max des abscisses 
             - eps : erreur maximale admise
             - meth : fonction de résolution pas à pas à utiliser parmi les quatres méthodes implémentées
-            Retourne 
+            Retourne une solution approchée avec un paramètre d'erreur epsilon de l'équation différentielle donnée en paramètre
         """
         MAX_STEP = 2**4
         flag = 0
@@ -183,7 +171,7 @@ class pCauchy(object):
             N *= 2
             h /= 2
             yf = self.meth_n_step(N, h, meth)
-            error = np.max(np.linalg.norm(yf[::2] - yf_old)*2/N)
+            error = np.max(np.linalg.norm(yf[::2] - yf_old))#*2/N)
             yf_old = yf
             flag += 1
         
@@ -192,70 +180,63 @@ class pCauchy(object):
         return yf
         
     # --- Affichage courbe équation différentielle --- #
-            
-    def aff_courbe_eq_diff(self, tf, eps=10E-3, file_name="courbes_eq_diff"):
+    
+    def aff_courbe_eq_diff(self, tf, eps=10E-2, file_name="courbes_eq_diff"):
         """ La fonction  "aff_courbe_eq_diff" prend 3 arguments :
             - self : classe représentant le problème de Cauchy
             - tf : borne max des abscisses
             - eps : erreur maximale admise
-            Affiche les courbes de l'équation différentielle calculées à l'aide des 4 méthodes implémentées
+            Affiche les courbes de l'équation différentielle calculée (dimension 1 ou 2 seulement) à l'aide des 4 méthodes implémentées
         """
         euler = self.meth_epsilon(tf, eps, self.step_euler)
         pm = self.meth_epsilon(tf, eps, self.step_point_milieu)
         heun = self.meth_epsilon(tf, eps, self.step_heun)
         rk = self.meth_epsilon(tf, eps, self.step_runge_kutta)
-        
-        t_euler = np.linspace(0, tf, np.shape(euler)[0], endpoint=False)
-        t_pm = np.linspace(0, tf, np.shape(pm)[0], endpoint=False)
-        t_heun = np.linspace(0, tf, np.shape(heun)[0], endpoint=False)
-        t_rk = np.linspace(0, tf, np.shape(rk)[0], endpoint=False)
-        
+
         plt.title("Courbes de l'equation differentielle")
         plt.xlabel("x")
         plt.ylabel("y")
 
-        for i in range(np.shape(euler)[1]):
-            plt.plot(t_euler, euler[:,i], linewidth=1.0, label="Euler")
-            plt.plot(t_pm, pm[:,i], linewidth=1.0, label="Point milieu")
-            plt.plot(t_heun, heun[:,i], linewidth=1.0, label="Heun")
-            plt.plot(t_rk, rk[:,i], linewidth=1.0, label="Runge-Kutta")
+        if (np.shape(euler)[1]==1):
+            t_euler = np.linspace(0, tf, np.shape(euler)[0], endpoint=False)
+            t_pm = np.linspace(0, tf, np.shape(pm)[0], endpoint=False)
+            t_heun = np.linspace(0, tf, np.shape(heun)[0], endpoint=False)
+            t_rk = np.linspace(0, tf, np.shape(rk)[0], endpoint=False)
             
-            plt.legend(loc='best')
-            plt.show()
-            plt.savefig(file_name+str(i)+".png")
-            plt.close()
+            plt.plot(t_euler, euler[:], linewidth=1.0, label="Euler")
+            plt.plot(t_pm, pm[:], linewidth=1.0, label="Point milieu")
+            plt.plot(t_heun, heun[:], linewidth=1.0, label="Heun")
+            plt.plot(t_rk, rk[:], linewidth=1.0, label="Runge-Kutta")
+            
+        if (np.shape(euler)[1]==2):
+            plt.plot(euler[:,0], euler[:,1], linewidth=1.0, label="Euler")
+            plt.plot(pm[:,0], pm[:,1], linewidth=1.0, label="Point milieu")
+            plt.plot(heun[:,0], heun[:,1], linewidth=1.0, label="Heun")
+            plt.plot(rk[:,0], rk[:,1], linewidth=1.0, label="Runge-Kutta")
+            
+        plt.legend(loc='best')
+        plt.show()
+        plt.savefig(file_name+".png")
+        plt.close()
 
 
 """
-
 Exemples:
-
 """
-
-def exemple1():
-    f = lambda x, t: x / (1 + t**2)
-    ex1 = pCauchy(0,1,f)
-
-
-
 def tests():
-    nbPas=10
-    pas=0.1
     eps = 10E-3
+    f = lambda y, t: y/(1-t**2)     #f = lambda x, t: x / (1 + t**2)
+    g = lambda y, t: [-y[1], y[0]]
     
-    f = lambda x, t: x/(1-t**2)
     dim1 = pCauchy(0, 1, f)
-    
-    g = lambda x, t: [-x[1], x[0]]
     dim2 = pCauchy(0, [1, 0], g)
     
-    dim1.aff_courbe_eq_diff(nbPas*pas, eps)
-    dim2.aff_courbe_eq_diff(nbPas*pas, eps)
+    dim1.aff_courbe_eq_diff(2.5, eps, "dim1")
+    dim2.aff_courbe_eq_diff(6.5, eps, "dim2")
     
-    dim2.champTangente(dim2.step_runge_kutta)
+    dim2.champTangente()
 
 
 
 if __name__ ==  '__main__':
-
     tests()
