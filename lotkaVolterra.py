@@ -1,76 +1,73 @@
 from classe import *
 
 t0 = 0.0
-
 y0 = [5.0]
-
 tf = 10
 
 
 """
-
 Resolution modele Malthus
+"""
+def malthus():
+    """ La fonction "malthus" prend ... arguments :
+        - ... : ...
+        Retourne une approximation de l'ordonnée du point suivant
+    """
+    b = 12.0
+    d = 11.0
+    
+    f_malthus = lambda yt, t: b * yt - d * yt
+    
+    malthus = pCauchy(t0, y0, f_malthus)
+    malthus.aff_courbe_eq_diff(tf, file_name="malthus")
 
-
-
-b = 12.0
-
-d = 11.0
-
-def f_malthus(yt, t):
-    return b * yt - d * yt
-
-malthus = pCauchy(t0, y0, f_malthus)
-
-malthus.aff_courbe_eq_diff(tf, file_name="malthus")
 
 """
-
-"""
-
 Resolution modele Verhulst
+"""
+def verhulst():
+    """ La fonction "malthus" prend ... arguments :
+        - ... : ...
+        Retourne une approximation de l'ordonnée du point suivant
+    """
+    gamma = 1.5
+    kappa = 10e4
 
+    f_verhulst = lambda yt, t: gamma * yt * (1 - yt / kappa)
 
+    verhulst = pCauchy(t0, y0, f_verhulst)
+    verhulst.aff_courbe_eq_diff(tf, file_name="verhulst")
 
-gamma = 1.5
-
-kappa = 10e4
-
-def f_verhulst(yt, t):
-    return gamma * yt * (1 - yt / kappa)
-
-verhulst = pCauchy(t0, y0, f_verhulst)
-
-verhulst.aff_courbe_eq_diff(tf, file_name="verhulst")
 
 """
-
-"""
-
 Resolution modele Lotka-Volterra
-
 """
+def lotka_volterra():
+    """ La fonction "malthus" prend ... arguments :
+        - ... : ...
+        Retourne une approximation de l'ordonnée du point suivant
+    """
+    a = 2.0/3
+    b = 4.0/3
+    c = 1.0
+    d = 1.0
+    y0 = np.array([1.0, 1.0])
+    tf = 30.0
+    
+    f_lv = lambda yt, t: np.array([yt[0] * (a - b * yt[1]), yt[1] * (c * yt[0] - d)])
+    lv = pCauchy(t0, y0, f_lv)
+    #lv.aff_courbe_eq_diff(tf, file_name="lotka-volterra")
+    graph_couple(lv)
+    graph_proie_pred(lv)
 
-a = 2.0/3
 
-b = 4.0/3
 
-c = 1.0
-
-d = 1.0
-
-y0 = np.array([1.0, 1.0])
-
-tf = 30.0
-
-def f_lv(yt, t):
-    return np.array([yt[0] * (a - b * yt[1]), yt[1] * (c * yt[0] - d)])
-
-lv = pCauchy(t0, y0, f_lv)
-#lv.aff_courbe_eq_diff(tf, file_name="lotka-volterra")
-
-def graph_couple():
-    sol = lv.meth_epsilon(tf, 10e-3, lv.step_euler)
+def graph_couple(equDiff):
+    """ La fonction "malthus" prend ... arguments :
+        - ... : ...
+        Retourne une approximation de l'ordonnée du point suivant
+    """
+    sol = equDiff.meth_epsilon(tf, 10e-3, equDiff.step_euler)
     t_sol = np.linspace(0, tf, np.shape(sol)[0], endpoint=False)
     
     plt.title("Variations du couple proies/predateurs")
@@ -86,8 +83,13 @@ def graph_couple():
     plt.close()
 
 
-def graph_proie_pred():
-    sol = lv.meth_epsilon(tf, 10e-3, lv.step_euler)
+
+def graph_proie_pred(equDiff):
+    """ La fonction "malthus" prend ... arguments :
+        - ... : ...
+        Retourne une approximation de l'ordonnée du point suivant
+    """
+    sol = equDiff.meth_epsilon(tf, 10e-3, equDiff.step_euler)
 
     plt.title("Nombre de predateurs en fonction des proies")
     plt.xlabel("Proies")
@@ -100,5 +102,10 @@ def graph_proie_pred():
     plt.close()
 
 
-graph_couple()
+
+
+
+
+if __name__ ==  '__main__':
+    lotka_volterra()
 
