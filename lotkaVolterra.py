@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from classe import *
 
 t0 = 0.0
@@ -11,7 +13,7 @@ Resolution modele Malthus
 def malthus():
     """ La fonction "malthus" prend ... arguments :
         - ... : ...
-        Retourne une approximation de l'ordonnée du point suivant
+        Retourne ...
     """
     b = 12.0
     d = 11.0
@@ -26,9 +28,9 @@ def malthus():
 Resolution modele Verhulst
 """
 def verhulst():
-    """ La fonction "malthus" prend ... arguments :
+    """ La fonction "verhulst" prend ... arguments :
         - ... : ...
-        Retourne une approximation de l'ordonnée du point suivant
+        Retourne ...
     """
     gamma = 1.5
     kappa = 10e4
@@ -43,9 +45,9 @@ def verhulst():
 Resolution modele Lotka-Volterra
 """
 def lotka_volterra():
-    """ La fonction "malthus" prend ... arguments :
+    """ La fonction "lotka_volterra" prend ... arguments :
         - ... : ...
-        Retourne une approximation de l'ordonnée du point suivant
+        Retourne ...
     """
     a = 2.0/3
     b = 4.0/3
@@ -63,9 +65,9 @@ def lotka_volterra():
 
 
 def graph_couple(equDiff):
-    """ La fonction "malthus" prend ... arguments :
+    """ La fonction "graph_couple" prend ... arguments :
         - ... : ...
-        Retourne une approximation de l'ordonnée du point suivant
+        Retourne ...
     """
     sol = equDiff.meth_epsilon(tf, 10e-3, equDiff.step_euler)
     t_sol = np.linspace(0, tf, np.shape(sol)[0], endpoint=False)
@@ -85,9 +87,9 @@ def graph_couple(equDiff):
 
 
 def graph_proie_pred(equDiff):
-    """ La fonction "malthus" prend ... arguments :
+    """ La fonction "graph_proie_pred" prend ... arguments :
         - ... : ...
-        Retourne une approximation de l'ordonnée du point suivant
+        Retourne ...
     """
     sol = equDiff.meth_epsilon(tf, 10e-3, equDiff.step_euler)
 
