@@ -13,7 +13,7 @@ class pCauchy(object):
         self.y0=y0
         self.f = f
 
-    def champTangente(self, xmin=-10, xmax=10, ymin=-10, ymax=10, pas=1):
+    def champTangente(self, meth, step=10, pas =0.1):
         """ La fonction "champTangente" prend 4 arguments :
             - self : classe représentant le problème de Cauchy
             - xmin : abscisse de la borne minimale
@@ -27,14 +27,14 @@ class pCauchy(object):
         Y = []
         U = []
         V = []
-        print(len(V))
-        for t in range(xmin,xmax,pas):
-            for yt in range(ymin, ymax, pas):
-                X.append(t)
-                Y.append(yt)
-                U.append(1)
-                V.append(self.f(yt,t))
-        Q = plt.quiver(X,Y,U,V)
+        y = self.meth_n_step(step, pas, meth)
+        
+        X = np.linspace(0, step*pas, np.shape(y)[0], endpoint=False)
+        Y=X
+        U=y[:,0]
+        V=y[:,1]
+
+        Q = plt.quiver(X, Y, U, V)
         plt.savefig("champ_tangente.png")
         plt.show()
         plt.clf()
@@ -49,6 +49,7 @@ class pCauchy(object):
             - h : pas 
             Retourne une approximation de l'ordonnée du point suivant
         """
+        y=np.array(y)
         f= self.f(y, t)
         res = y + [(h*i) for i in f] #y + h * self.f(y, t)
 
@@ -64,6 +65,7 @@ class pCauchy(object):
             - h : pas 
             Retourne une approximation de l'ordonnée du point suivant
         """
+        y=np.array(y)
         n = np.shape(y)[0]
         a = np.zeros([n,1])
         a.shape=(n)
@@ -85,6 +87,7 @@ class pCauchy(object):
             - h : pas 
             Retourne une approximation de l'ordonnée du point suivant
         """
+        y=np.array(y)
         n = np.shape(y)[0]
         a = np.zeros([n])
         p1 = np.zeros([n])
@@ -109,6 +112,7 @@ class pCauchy(object):
             - h : pas 
             Retourne une approximation de l'ordonnée du point suivant
         """
+        y=np.array(y)
         n = np.shape(y)[0]
         p1 = np.zeros([n])
         p2 = np.zeros([n])
@@ -179,7 +183,7 @@ class pCauchy(object):
             N *= 2
             h /= 2
             yf = self.meth_n_step(N, h, meth)
-            error = np.linalg.norm(yf[::2] - yf_old)/N
+            error = np.max(np.linalg.norm(yf[::2] - yf_old)*2/N)
             yf_old = yf
             flag += 1
         
@@ -204,7 +208,7 @@ class pCauchy(object):
         t_euler = np.linspace(0, tf, np.shape(euler)[0], endpoint=False)
         t_pm = np.linspace(0, tf, np.shape(pm)[0], endpoint=False)
         t_heun = np.linspace(0, tf, np.shape(heun)[0], endpoint=False)
-        t_rk  = np.linspace(0, tf, np.shape(rk)[0], endpoint=False)
+        t_rk = np.linspace(0, tf, np.shape(rk)[0], endpoint=False)
         
         plt.title("Courbes de l'equation differentielle")
         plt.xlabel("x")
@@ -228,20 +232,16 @@ Exemples:
 
 """
 
-
 def exemple1():
-    def fex1(yt,t):
-        return yt / (1 + t**2)
+    f = lambda x, t: x / (1 + t**2)
+    ex1 = pCauchy(0,1,f)
 
-    ex1 = pCauchy(0,1,fex1)
-    ex1.champTangente()
-    
 
 
 def tests():
     nbPas=10
     pas=0.1
-    eps = 10E-2
+    eps = 10E-3
     
     f = lambda x, t: x/(1-t**2)
     dim1 = pCauchy(0, 1, f)
@@ -251,9 +251,11 @@ def tests():
     
     dim1.aff_courbe_eq_diff(nbPas*pas, eps)
     dim2.aff_courbe_eq_diff(nbPas*pas, eps)
+    
+    dim2.champTangente(dim2.step_runge_kutta)
 
 
 
 if __name__ ==  '__main__':
-    exemple1()
+
     tests()
