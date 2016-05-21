@@ -2,10 +2,6 @@
 
 from classe import *
 
-t0 = 0.0
-y0 = [5.0]
-tf = 10
-
 
 """
 Resolution modele Malthus
@@ -15,6 +11,10 @@ def malthus():
         - ... : ...
         Retourne ...
     """
+
+    t0 = 0.0
+    y0 = [5.0]
+    tf = 10
     b = 12.0
     d = 11.0
     
@@ -32,6 +32,10 @@ def verhulst():
         - ... : ...
         Retourne ...
     """
+
+    t0 = 0.0
+    y0 = [5.0]
+    tf = 10
     gamma = 1.5
     kappa = 10e4
 
@@ -53,18 +57,18 @@ def lotka_volterra():
     b = 4.0/3
     c = 1.0
     d = 1.0
+    t0 = 0.0
     y0 = np.array([1.0, 1.0])
     tf = 30.0
     
     f_lv = lambda yt, t: np.array([yt[0] * (a - b * yt[1]), yt[1] * (c * yt[0] - d)])
     lv = pCauchy(t0, y0, f_lv)
-    #lv.aff_courbe_eq_diff(tf, file_name="lotka-volterra")
-    graph_couple(lv)
-    graph_proie_pred(lv)
+#    graph_couple(lv, tf)
+#    graph_proie_pred(lv, tf)
+    graph_comportement_local(lv, 5.0)
 
 
-
-def graph_couple(equDiff):
+def graph_couple(equDiff, tf):
     """ La fonction "graph_couple" prend ... arguments :
         - ... : ...
         Retourne ...
@@ -86,7 +90,7 @@ def graph_couple(equDiff):
 
 
 
-def graph_proie_pred(equDiff):
+def graph_proie_pred(equDiff, tf):
     """ La fonction "graph_proie_pred" prend ... arguments :
         - ... : ...
         Retourne ...
@@ -103,10 +107,36 @@ def graph_proie_pred(equDiff):
     plt.savefig("proie_predateur.png")
     plt.close()
 
+def local(y0, eps=0.2):
+    """ La fonction "local" prend 3 arguments :
+        - y0 : point d'origine (en dimension 2)
+        - eps : variations sur la coordonnee 2
+        Retourne un tableau contenant les points voisins de y0
+    """
 
+    loc = []
+    for j in np.arange(y0[1] - eps, y0[1] + eps, eps / 10):
+        loc.append([y0[0], j])
+    return loc
 
+def graph_comportement_local(equDiff, tf):
+    """ La fonction "graph_comportement_local" prend ... arguments :
+        - ... : ...
+        Retourne ...
+    """
 
+    plt.title("Comportement local des solutions")
+    plt.xlabel("Proies")
+    plt.ylabel("Predateurs")
+    plt.axis([0.45,0.65,0.6,0.75])
+    y0 = equDiff.y0
 
+    for equDiff.y0 in local(y0):
+        sol = equDiff.meth_epsilon(tf, 10e-3, equDiff.step_euler)
+        plt.plot(sol[:,0], sol[:,1], linewidth=1.0, color='k')
+    plt.show()
+    plt.savefig("compLocal.png")
+    plt.close()
 
 if __name__ ==  '__main__':
     lotka_volterra()
