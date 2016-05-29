@@ -125,21 +125,19 @@ def aff_traj_pend_2_maillons(pend_2m, N, h, L1, L2):
 
 
 
-def aff_map(f, L1, L2):
-    """ La fonction "aff_map" prend 3 arguments :
+def aff_map(f):
+    """ La fonction "aff_map" prend 1 argument :
         - f : fonction pour calculer le prochain pas du pendule à 2 maillons
-        - L1 : longueur de la tige 1
-        - L2 : longueur de la tige 2
         Affiche la carte des temps de premier retournement du pendule en fonction des conditions initiales (theta 1 et 2)
     """
-    N = 100
+    N = 70
     h = 0.05
     mu = []
     theta = []
     tabFreq = []
-    precPi = 5.0
+    precPi = 10.0
     size = int(2*np.pi*precPi)
-    plt.title('Oscillations')
+    plt.title('Carte des temps de premier retournement du pendule')
     
     for theta1 in range(size):
         for theta2 in range(size):
@@ -161,7 +159,7 @@ def aff_map(f, L1, L2):
     
     plt.imshow(matrice, norm=ma.colors.LogNorm(), interpolation='none', cmap='hot')
     plt.show()
-    plt.savefig("map2.png")
+    plt.savefig("map.png")
     plt.close()
 
 
@@ -184,16 +182,14 @@ def pendule_deux_maillons():
     theta0_m2 = np.pi/4
     
     pend2m = classe.pCauchy(0, [theta0_m1, theta0_m2, 0.0, 0.0], f2)
-
-    #aff_traj_pend_2_maillons(pend2m, nbPas, pas, L1, L2)
-    
-    aff_map(f2, L1, L2)
+    aff_traj_pend_2_maillons(pend2m, nbPas, pas, L1, L2)
+    aff_map(f2)
 
 
 
 
 if __name__ ==  '__main__':
-    #pendule_un_maillon()
+    pendule_un_maillon()
     pendule_deux_maillons()
     
     
