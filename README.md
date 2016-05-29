@@ -5,5 +5,5 @@ Rapport sur ShareLatex :
 email : diff2projet@algonum.com
 mdp : vatefairefoutre
 
-J'ai fini la partie Lotka-Volterra sur le sharelatex, je me suis relu donc côté fautes/oublis ça devrait être OK normalement.
-Il me reste juste à trouver un algo permettant de calculer la période d'une fonction périodique, je vais finir par y arriver je pense^^
+Je m'occuperai de remettre le projet ce soir entre 22h et 23h30 (en fonction de l'avancement du projet)
+Si quelqu'un n'aura pas fini sa partie d'ici là, qu'il me tienne au courant pour qu'on boucle ça ensemble ou qu'il se taise à tout jamais ;)
